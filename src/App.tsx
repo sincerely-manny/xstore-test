@@ -71,7 +71,9 @@ const store = createStoreWithProducer(
     on: {
       add: (context, event: { server: Server }) => {
         context.servers[event.server.id] = event.server;
-        context.serverIds.push(event.server.id.toString());
+        if (!context.serverIds.includes(event.server.id)) {
+          context.serverIds.push(event.server.id);
+        }
       },
       setPing: (
         context,
@@ -103,7 +105,7 @@ async function pingServers() {
 }
 
 function App() {
-  const serverIds = useSelector(store, (state) => state.context.serverIds);
+  const serverIds = useSelector(store, (state) => state.context.serverIds)
 
   useEffect(() => {
     addServers().then(() => {
